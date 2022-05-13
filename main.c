@@ -37,9 +37,10 @@ int main(int argc, char *argv[])
     int clusters = 0;
     Point *clusterPoints;
 
-    #pragma omp parallel reduction(| : clusters)
+    #pragma omp parallel shared(clusters)
     {
-        clusters |= omp_get_num_threads();
+        #pragma omp single
+        clusters = omp_get_num_threads();
     }
 
     file = fopen("./points.txt", "r");
